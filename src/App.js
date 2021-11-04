@@ -3,13 +3,21 @@ import {useEffect, useState} from 'react'
 import Square from "./Components/Square"
 import {Patterns} from "./Patterns"
 function App() {
+
+
+  // State declerations for board, player, and result
   const [board, setBoard] = useState(["","", "", "", "", "", "", "", ""]);
   const [player, setPlayer] = useState("O");
   const [result, setResult] = useState({ winner: "none", state: "none" })
 
+
+  // useEffect will execute the function we give it on the first render and every time the board state is updated.
   useEffect(() => {
-    checkVictory();
+
     checkIfTie();
+    checkVictory();
+    
+    // Switches player
     if (player == "X") {
       setPlayer("O");
     } else {
@@ -17,6 +25,7 @@ function App() {
     }
   }, [board]);
 
+  // useEffect will execute every time the result state is updated.
   useEffect(() => {
     if (result.state != "none") {
       alert(`Game Finished! Winning Player : ${result.winner}`)
@@ -25,7 +34,8 @@ function App() {
     
   }, [result])
 
-  // Update board to change val for square to either x or o depending on player
+
+  // Function to change the value of the square to whatever the player's value is (i.e "X","O")
   const chooseSquare = (square) => {
     setBoard(board.map((val, i) => {
       if (i == square && val == "") {
@@ -36,6 +46,8 @@ function App() {
     }))
   }
 
+
+  // Logic to check for a win by comparing the board with the patterns specified in Patterns.js
   const checkVictory = () => {
     Patterns.forEach((currPattern) => {
       const firstPlayer = board[currPattern[0]];
@@ -53,6 +65,8 @@ function App() {
     });
   };
 
+
+  // Logic to check if there is a tie (every square has been filled and a winning combination was not found)
   const checkIfTie = () => {
     let filled = true;
     board.forEach((square) => {
@@ -66,13 +80,15 @@ function App() {
     }
   }
 
+
+  // Simple function reset board and player back to their initial values.
   const restartGame = () => {
     setBoard(["","", "", "", "", "", "", "", ""]);
     setPlayer("O");
   }
   return ( 
   <div className="App">
-    <div className="board">
+    <div className="board"> 
       <div className="row">
         <Square val={board[0]} chooseSquare={()=> {chooseSquare(0)}}/>
         <Square val={board[1]} chooseSquare={()=> {chooseSquare(1)}}/>
@@ -94,3 +110,4 @@ function App() {
 }
 
 export default App;
+
